@@ -16,12 +16,13 @@ namespace DataAccess.Concrete.EntitiyFramework
         //bu metod proje hangi veri tabanı ile ilşkili onun belirtildiği yerdir.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //ovveride on tab*  
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Databese=Northwind;Trusted_Connection=true");
+            optionsBuilder.UseSqlServer(@"Server=DESKTOP-RDQ6ANA\SQLEXPRESS;Database=Northwind;Trusted_Connection=true;TrustServerCertificate=True");
+
 
         }
 
         //Benim hangi classım hangi veri tabanı tablosuna bağlanacak.
-        public DbSet<Product> Products{ get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
 

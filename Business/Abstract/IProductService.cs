@@ -12,6 +12,10 @@ namespace Business.Abstract
 
         List<Product> GetAll();//Tüm ürünleri listeleyecek 
 
+        List<Product> GetAllByCategoryId(int id);
+
+        List<Product> GetByUnitPrice(decimal min,decimal max);
+
 
 
 

@@ -1,5 +1,6 @@
 ﻿using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,27 +16,85 @@ namespace DataAccess.Concrete.EntitiyFramework
     {
         public void Add(Product entitiy)
         {
-            //1:46:29   ---8. ders 
+            //IDisposable pattern implementation of c#
+            //C# da using içerisine yazılan değişkenler using bitince garbage collectore giderek beni bellekten at der.
+            //Daha performanslı ürün geliştirmek için kullanılır,belleği hızlıca temizleme
+            using (NorthwindContext context =new NorthwindContext())
+            {
+
+                var addedEntity = context.Entry(entitiy); //eklenecek veriyi git veri kaynağından bir tane nesne ile eşleştir.Ekleme olduğu için burda direk referansı yakaladık.
+                addedEntity.State = EntityState.Added;//Eklenecek nesne 
+                context.SaveChanges();
+
+
+            }
         }
+
+
+
 
         public void Delete(Product entitiy)
         {
-            throw new NotImplementedException();
+            using (NorthwindContext context = new NorthwindContext())
+            {
+                var deletedEntity = context.Entry(entitiy); 
+                deletedEntity.State = EntityState.Deleted;
+                context.SaveChanges();
+
+            }
         }
+
+
+
 
         public Product Get(Expression<Func<Product, bool>> filter)
         {
-            throw new NotImplementedException();
+            using (NorthwindContext context = new NorthwindContext())
+            {
+                return context.Set<Product>().SingleOrDefault(filter);
+                //product döndürücek. ona single ordefault gönderiyoruz.
+                //tek bir sonuç gelicek.
+
+
+            }
         }
+
+
+
+
+
 
         public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
         {
-            throw new NotImplementedException();
+            using (NorthwindContext context =new NorthwindContext())
+            {
+                return filter == null ? context.Set<Product>().ToList() : context.Set<Product>().Where(filter).ToList();
+             //Db setteki Product tablosuna yerleş.                     filtreli olarak getirmek istendiğinde 
+             //select * from Products; döndürür.
+
+
+            }
+
+
+
+
         }
+
+
+
 
         public void Update(Product entitiy)
         {
-            
+            using (NorthwindContext context = new NorthwindContext())
+            {
+                var updatedEntity = context.Entry(entitiy); 
+                updatedEntity.State = EntityState.Modified;
+                context.SaveChanges();
+
+            }
         }
     }
+
+
+    //normalde diğer classlar içinde aynı şekilde sadece değişkenler değişiyor nu durumda generic yapı kullanabilirizz!!
 }
